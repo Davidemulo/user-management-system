@@ -13,7 +13,16 @@ export default function EditUser() {
     state.users.users.find((u) => u.id === Number(id))
   );
 
-  if (!user) return <p>User not found</p>;
+    if (!user) {
+    return (
+        <div>
+        <h2>User not found</h2>
+        <button onClick={() => navigate("/users")}>
+            Go Back
+        </button>
+        </div>
+    );
+    }
 
   const handleUpdate = (updatedUser: any) => {
     dispatch(updateUser(updatedUser));

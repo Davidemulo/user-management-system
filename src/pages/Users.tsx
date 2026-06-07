@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers, deleteUser } from "../store/userSlice";
 import { RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
+import UserCard from "../components/UserCard";
 
 export default function Users() {
   const dispatch = useDispatch();
@@ -24,47 +25,19 @@ export default function Users() {
         ➕ Add User
       </button>
 
-      {loading && <p>Loading users...</p>}
+      {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
-      {!loading && users.length === 0 && (
-        <p>No users available</p>
+      {users.length === 0 && !loading && (
+        <p>No users found</p>
       )}
 
       {users.map((user) => (
-        <div
+        <UserCard
           key={user.id}
-          style={{
-            border: "1px solid gray",
-            marginTop: 10,
-            padding: 10,
-          }}
-        >
-          <h3
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/users/${user.id}`)}
-          >
-            {user.name}
-          </h3>
-
-          <p>{user.email}</p>
-
-          <p>
-            {user.address.city} - {user.address.street}
-          </p>
-
-          <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={() => navigate(`/edit-user/${user.id}`)}>
-              Edit
-            </button>
-
-            <button
-              onClick={() => dispatch(deleteUser(user.id))}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
+          user={user}
+          onDelete={(id) => dispatch(deleteUser(id))}
+        />
       ))}
     </div>
   );
