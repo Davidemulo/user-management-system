@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Types
 export interface User {
   id: number;
   name: string;
@@ -24,7 +23,7 @@ const initialState: UserState = {
   error: null,
 };
 
-// 🔥 Async thunk to fetch users
+// FETCH ONLY (API)
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   const response = await axios.get(
     "https://jsonplaceholder.typicode.com/users"
@@ -36,15 +35,33 @@ const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    // we will add CRUD later
+    // ADD USER
+    addUser: (state, action: PayloadAction<User>) => {
+      state.users.push(action.payload);
+    },
+
+    // UPDATE USER
+    updateUser: (state, action: PayloadAction<User>) => {
+      const index = state.users.findIndex(
+        (u) => u.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.users[index] = action.payload;
+      }
+    },
+
+    // DELETE USER
+    deleteUser: (state, action: PayloadAction<number>) => {
+      state.users = state.users.filter((u) => u.id !== action.payload);
+    },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
-      .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<User[]>) => {
+      .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload;
       })
@@ -55,4 +72,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { addUser, updateUser, deleteUser } = userSlice.actions;
 export default userSlice.reducer;
