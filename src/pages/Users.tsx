@@ -1,21 +1,16 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, deleteUser } from "../store/userSlice";
-import { RootState } from "../store/store";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import UserCard from "../components/UserCard";
+import { useUsers } from "../hooks/useUsers";
 
 export default function Users() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { users, loading, error } = useSelector(
-    (state: RootState) => state.users
-  );
+  const { data, isLoading, error } = useUsers();
 
-  useEffect(() => {
-    dispatch(fetchUsers() as any);
-  }, [dispatch]);
+  const users = data || [];
 
   return (
     <div style={{ padding: 20 }}>
@@ -25,10 +20,11 @@ export default function Users() {
         ➕ Add User
       </button>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {isLoading && <p>Loading users...</p>}
 
-      {users.length === 0 && !loading && (
+      {error && <p>Failed to load users</p>}
+
+      {!isLoading && users.length === 0 && (
         <p>No users found</p>
       )}
 
