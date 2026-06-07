@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { RootState } from "../store/store";
+import type { RootState } from "../store/store";
 import { updateUser } from "../store/userSlice";
 import UserForm from "../components/UserForm";
+import type { User } from "../types/user";
 
 export default function EditUser() {
   const { id } = useParams();
@@ -24,10 +25,10 @@ export default function EditUser() {
     );
     }
 
-  const handleUpdate = (updatedUser: any) => {
-    dispatch(updateUser(updatedUser));
-    navigate("/users");
-  };
+  const handleUpdate = (updatedUser: User) => {
+  dispatch(updateUser(updatedUser));
+  navigate("/users");
+};
 
   return <UserForm initialData={user} onSubmit={handleUpdate} />;
 }

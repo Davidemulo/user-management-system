@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User } from "../store/userSlice";
+import type { User } from "../types/user";
 
 interface Props {
   initialData?: User;
