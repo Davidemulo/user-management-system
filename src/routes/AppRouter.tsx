@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Users from "../pages/Users";
 import AddUser from "../pages/AddUser";
 import EditUser from "../pages/EditUser";
@@ -8,10 +8,13 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* default route */}
+        <Route path="/" element={<Navigate to="/users" />} />
+
         <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<UserDetails />} />
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/edit-user/:id" element={<EditUser />} />
-        <Route path="/users/:id" element={<UserDetails />} />
       </Routes>
     </BrowserRouter>
   );

@@ -8,7 +8,7 @@ export default function Users() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { users, loading } = useSelector(
+  const { users, loading, error } = useSelector(
     (state: RootState) => state.users
   );
 
@@ -17,32 +17,53 @@ export default function Users() {
   }, [dispatch]);
 
   return (
-    <div>
-      <h1>Users List</h1>
+    <div style={{ padding: 20 }}>
+      <h1>User Management System</h1>
 
       <button onClick={() => navigate("/add-user")}>
-        Add User
+        ➕ Add User
       </button>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p>Loading users...</p>}
+      {error && <p>{error}</p>}
+
+      {!loading && users.length === 0 && (
+        <p>No users available</p>
+      )}
 
       {users.map((user) => (
-        <div key={user.id} style={{ border: "1px solid black", margin: 10 }}>
-          <h3 onClick={() => navigate(`/users/${user.id}`)}>
+        <div
+          key={user.id}
+          style={{
+            border: "1px solid gray",
+            marginTop: 10,
+            padding: 10,
+          }}
+        >
+          <h3
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(`/users/${user.id}`)}
+          >
             {user.name}
           </h3>
 
           <p>{user.email}</p>
 
-          <button onClick={() => navigate(`/edit-user/${user.id}`)}>
-            Edit
-          </button>
+          <p>
+            {user.address.city} - {user.address.street}
+          </p>
 
-          <button
-            onClick={() => dispatch(deleteUser(user.id))}
-          >
-            Delete
-          </button>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={() => navigate(`/edit-user/${user.id}`)}>
+              Edit
+            </button>
+
+            <button
+              onClick={() => dispatch(deleteUser(user.id))}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>
