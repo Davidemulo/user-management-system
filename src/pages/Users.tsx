@@ -1,30 +1,33 @@
-import { useDispatch } from "react-redux";
-import { deleteUser } from "../store/userSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import type { RootState, AppDispatch } from "../store/store";
+import { fetchUsers, deleteUser } from "../store/userSlice";
 import UserCard from "../components/UserCard";
-import { useUsers } from "../hooks/useUsers";
 
 export default function Users() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useUsers();
+  const { users, loading } = useSelector(
+    (state: RootState) => state.users
+  );
 
-  const users = data || [];
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   return (
     <div style={{ padding: 20 }}>
       <h1>User Management System</h1>
 
       <button onClick={() => navigate("/add-user")}>
-        ➕ Add User
+        Add User
       </button>
 
-      {isLoading && <p>Loading users...</p>}
+      {loading && <p>Loading users...</p>}
 
-      {error && <p>Failed to load users</p>}
-
-      {!isLoading && users.length === 0 && (
+      {!loading && users.length === 0 && (
         <p>No users found</p>
       )}
 

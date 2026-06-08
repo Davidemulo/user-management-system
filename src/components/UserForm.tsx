@@ -9,8 +9,8 @@ interface Props {
 export default function UserForm({ initialData, onSubmit }: Props) {
   const [name, setName] = useState(initialData?.name || "");
   const [email, setEmail] = useState(initialData?.email || "");
-  const [city, setCity] = useState(initialData?.address.city || "");
-  const [street, setStreet] = useState(initialData?.address.street || "");
+  const [city, setCity] = useState(initialData?.address?.city || "");
+  const [street, setStreet] = useState(initialData?.address?.street || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
